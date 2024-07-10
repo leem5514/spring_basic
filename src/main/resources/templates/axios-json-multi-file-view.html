@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Axios Json File View</title>
+</head>
+<body>
+<form id="form-view" >
+    이름 : <input type="text"id="name"  name="name"> <br>
+    email : <input type="text" id="email" name="email"> <br>
+    password : <input type="text" id="password" name="password"> <br>
+    파일 : <input type="file" id="file" name="file" multiple><br>
+    <input type="submit" value="제출">
+</form>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById("form-view").addEventListener('submit',
+        async function(event){
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const hello = {name:name, email:email, password:password};
+            const helloJson = JSON.stringify(hello);
+
+            const fileInput = document.getElementById('file');
+            const files = fileInput.files;
+            // 블롭함수는 데이터형을 지정 /변환할 떄 사용.
+            const formData = new FormData();
+            formData.append('hello', new Blob([helloJson], {type:"application/json"}));
+            //formData.append('hello', helloJson);
+            for(let i = 0 ; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
+            try{
+                const response = await axios.post('http://localhost:8080/hello/axios-json-multi-file-view', formData, {headers : {'Content-Type' : 'multipart/form-data'}});
+                console.log(response.data);
+            }catch(e){
+                console.log(e);
+            }
+        }
+    )
+
+</script>
+</body>
+</html>

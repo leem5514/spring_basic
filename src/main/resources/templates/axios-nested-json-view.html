@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nested Json View</title>
+</head>
+<body>
+    <form id="form-view">
+        이름 : <input type="text"id="name"  name="name"> <br>
+        이메일 : <input type="text" id="email" name="email"> <br>
+
+        <div id="grades">
+            <p>성적 정보 : </p>
+            <div class="grade">
+                과목 : <input type="text" id="className" class="className" name="className"> <br>
+                점수 : <input type="text" id="score" class="score" name="score"> <br>
+<!--                <input type="button" value="성적추가" onclick="addGrade()">-->
+            </div>
+        </div>
+        <button type="button" onclick="addGrade()">성적 추가</button>
+
+        <input type="submit" value="제출">
+
+    </form>
+    <script>
+        function addGrade() {
+            const gradeDiv = document.getElementById('grades');
+            gradeDiv.innerHTML += `
+                <div class="grade">
+                    과목 : <input type="text" id="className" class="className" name="className"> <br>
+                    점수 : <input type="text" id="score" class="score" name="score"> <br>
+                </div>
+            `;
+        }
+
+        document.getElementById("form-view").addEventListener('submit',
+            async function(event){
+                event.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+
+                let grades = [];
+                const gradeDivs = document.getElementsByClassName('grade');
+                for (let i = 0 ; i < gradeDivs.length; i++) {
+                    const className = gradeDivs[i].getElementsByClassName('className')[0].value;
+                    const score = gradeDivs[i].getElementsByClassName('score')[0].value;
+                    const gradeObj = {className, score};
+                    grades.push(gradeObj);
+                }
+
+                console.log(grades);
+
+                try{
+                    const response = await axios.post('http://localhost:8080/hello/axios-nested-json-view',
+                        {name:name, email:email, password:password, grades:grades}
+                    )
+                }catch(e){
+                    console.log(e);
+                }
+            }
+        )
+
+    </script>
+
+
+</body>
+</html>
