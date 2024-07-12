@@ -24,8 +24,13 @@ repositories {
 // starter 종속성은 일반적으로 별도의 버젼관리가 필요없고, 버전에 따라 호환성을 맞춰줌.
 dependencies {
 	// DB 연결 및 관리를 위한 의존성 : JDBC, mybatis, JPA, springdata JPA
-	//implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	//implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	// mybatis 관련 의존성 추가
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// mariaDB 의존성 추가
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	// 타임리프(템플릿 엔진 -JSP, 타임리프 등 ) 의존성 주입
 	// CSR : 화면과 서버(데이터만) 분리 / SSR : 서버 안에서 화면까지 렌더링(화면 + 데이터)
@@ -41,6 +46,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 tasks.named('test') {

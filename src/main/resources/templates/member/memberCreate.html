@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
@@ -91,6 +91,7 @@
     }
 </style>
 <body>
+    <div th:replace="member/header :: headerFragment"></div>
 <!--    <form action="" method="post" enctype="application/x-www-form-urlencoded">-->
 <!--      이름 : <input type="text" name="name"><br>-->
 <!--      이메일 : <input type="text" name="email"><br>-->
