@@ -31,7 +31,8 @@ public class MemberJpaRepository implements MemberRepository{
     public List<Member> findAll() {
         // jpql : jpa의 raw 쿼리 문법(객체지향쿼리문법)
         // jpa에서는 jpql 문법 컴파일에러가 나오지 않으나, springdatajpa에서는 컴파일에러 발생
-        List<Member> memberList = (List<Member>) em.createQuery("select m from Member m", Member.class).getSingleResult();
+        List<Member> memberList = em.createQuery("select m from Member m", Member.class).getResultList();
+
         return memberList;
     }
 
@@ -47,6 +48,11 @@ public class MemberJpaRepository implements MemberRepository{
         //entitiy Manager을 통해서 find(리턴타입클래스, 매개변수로 pk 값 지정 )
         Member member = em.find(Member.class, id);
         return Optional.ofNullable(member);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
     }
     // pk 이외의 컬럼으로 조회할 때
     // join 문법으로 raw 쿼리 비슷하게 직접 쿼리 구성

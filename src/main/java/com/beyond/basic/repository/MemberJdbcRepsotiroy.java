@@ -81,4 +81,9 @@ public class MemberJdbcRepsotiroy implements MemberRepository{
         }
         return Optional.ofNullable(member);
     }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
 }

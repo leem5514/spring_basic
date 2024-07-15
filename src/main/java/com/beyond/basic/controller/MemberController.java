@@ -34,6 +34,7 @@ public class MemberController {
         // @NonNull    // 비어진 값이 없으면 x ! (final으로 대체 가능)
         // private final MemberService memberService;
 
+    // 생성자가 한개밖에 없는 경우 @Autowired 생략 가능
     private final MemberService memberService;
     private final MemberMemoryRepository memberMemoryRepository;
 
@@ -56,7 +57,7 @@ public class MemberController {
     }
     // 회원 상세 조회
     // url : member/1, member/2
-    @GetMapping("/member/detail/{id}")
+    @GetMapping("/member/{id}")
     // int 또는 long 받을 경우 spring에서 형변환 적용(string -> long, int)
     public String memberDetail(@PathVariable Long id, Model model) {
         MemberDetailResDto memberDetailResDto = memberService.memberDetail(id);
