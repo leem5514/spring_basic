@@ -10,7 +10,9 @@ import java.util.Optional;
 // 해당 클래스가 Repository 계층임을 표혐함과 동시에 싱글톤객체로(단 하나의 객체로 생성) 생성
 @Repository
 public class MemberMemoryRepository implements MemberRepository {
+
     private final List<Member> memberList;
+
     MemberMemoryRepository() {
         memberList = new ArrayList<>();
     }
@@ -32,8 +34,8 @@ public class MemberMemoryRepository implements MemberRepository {
         return null;
     }
 
-    @Override
-    public void deleteById(Long id) {
-
-    }
+//    @Override
+//    public void deleteById(Long id) {
+//
+//    }
 }

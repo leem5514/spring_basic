@@ -2,6 +2,7 @@ package com.beyond.basic.repository;
 
 import com.beyond.basic.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,4 +19,7 @@ public interface MyMemberRepository  extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
     List<Member> findByName(String name);
 
+//    // jpql 문법을 통한 raw 쿼리 직성시 컴파일타입에서 오류 체크
+//    @Query("select m from Member m")
+//    List<Member> myfindAll();
 }

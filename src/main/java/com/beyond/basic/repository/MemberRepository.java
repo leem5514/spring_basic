@@ -14,5 +14,5 @@ public interface MemberRepository {
 //    Member findById(Long id);
     Optional<Member> findById(Long id);
 
-    void delete(Long id);
+//    void delete(Long id);
 }

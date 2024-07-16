@@ -15,7 +15,8 @@ import java.util.Optional;
 //input 값의 검증 및 실질적 비즈니스 로직은 서비스 계층에서 실행
 @Service // 서비스 계층임을 표현함과 동시 싱글톤객체로 생성
 // Transactional 어노테이션을 통해서 모든 메서드에 트랜잭션 적용, 만약 예외가 발생 시 롤백처리 자동화
-@Transactional
+//@Transactional
+@Transactional(readOnly = true) // 조회성능 향상화
 public class MemberService {
     // springdataJpaRepository 홀로만 구현할 경우!
     //private final MyMemberRepository memberRepository;
@@ -32,8 +33,10 @@ public class MemberService {
 //    }
     public MemberService(MemberJpaRepository memberMemoryRepository) {
         this.memberRepository = memberMemoryRepository;
+
     }
 
+    @Transactional
     public void memberCreate(MemberReqDto dto) {
         if(dto.getPassword().length() < 8) {
             throw new IllegalArgumentException("비밀번호가 너무 짧습니다.");
@@ -46,6 +49,12 @@ public class MemberService {
         Member member = dto.toEntity();
 
         memberRepository.save(member);
+
+        // 트랜잭션 롤백처리 테스트 // 보통은 save가 2개이상인 경우에 의미 有 ex) 주문 order, order_Detail
+//        if(member.getName().equals("kim")){
+//            throw new IllegalArgumentException("트랜잭션 테스트 에러");
+//        }
+
     }
 
    public MemberDetailResDto memberDetail(Long id) {
@@ -92,10 +101,10 @@ public class MemberService {
         memberRepository.save(member);
 
     }
-    public void idDelete(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("member is not found"));
-        memberRepository.delete(member);
-        // member.updateDelYn("Y");
-        /// memberRepository.save(member);
-    }
+//    public void idDelete(Long id) {
+//        Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("member is not found"));
+//        memberRepository.delete(member);
+//        // member.updateDelYn("Y");
+//        /// memberRepository.save(member);
+//    }
 }

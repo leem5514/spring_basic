@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,6 +30,13 @@ public class HelloController {
         return "helloworld";
         // return "hello world";
     }
+
+    //컨트롤러에서도 HttpServlet Request 객체를 주입받아서 사용 가능
+//    public String helloWorld(HttpServletRequest request) {
+//        System.out.println(request.getSession());
+//        System.out.println(request.getHeader("Cookie"));
+//        return "helloworld";
+//    }
 
 
     // case 3 : 사용자가 json 데이터 요청(get)

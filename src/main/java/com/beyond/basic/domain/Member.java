@@ -15,6 +15,9 @@ import java.util.List;
 //@AllArgsConstructor
 // entity 어노테이션을 통해서 엔티티 메니져에게 객체 관리를 위임
 // 해당 클래스명으로 테이블 및 컬럼을 자동생성하고 각종 설정정보 위임 (JPA으로 진행할 때 바로 붙이기!!) / JPA : 객체중심사상
+// 싱글톤 객체 = 스프링 빈(bean) - > spring 에서 관리 / @Component : 클래스 단윈로 지정 ,@Bean(외부 라이브러리) : 메서드 단위로 지정, return 객체 + configuration
+//
+
 @Entity
 public class Member {
     @Id // pk 설정(必) - 없는 경우 에러 발생

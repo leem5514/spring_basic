@@ -1,12 +1,11 @@
 package com.beyond.basic.controller;
 
-import com.beyond.basic.domain.MemberDetailResDto;
-import com.beyond.basic.domain.MemberReqDto;
-import com.beyond.basic.domain.MemberResDto;
-import com.beyond.basic.domain.MemberUpdateDto;
+import com.beyond.basic.domain.*;
 import com.beyond.basic.repository.MemberMemoryRepository;
 import com.beyond.basic.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +28,21 @@ public class MemberRestController {
     @GetMapping("/member/list")
     public List<MemberResDto> memberList() {
         List<MemberResDto> memberList = memberService.memberList();
-        return memberList;
+        CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", memberList);
+
+        return (List<MemberResDto>) new ResponseEntity<>(commonResDto, HttpStatus.CREATED);
     }
-    @GetMapping("/member/detail/{id}")
+    @GetMapping("/member/{id}")
     public MemberDetailResDto memberDetail(@PathVariable Long id) {
+        List<MemberResDto> memberDetail = memberService.memberList();
+        CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", memberService.memberDetail(id));
+        CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.CREATED, "error code" , memberDetail);
+
+        if (memberService.memberDetail(id) != null) {
+            return ResponseEntity<>(commonResDto, HttpStatus.CREATED);
+        }
         return memberService.memberDetail(id);
+        return new ResponseEntity<>(commonErrorDto, HttpStatus.CREATED);
     }
     @PostMapping("/member/create")
     public String memberCreatePost(@RequestBody MemberReqDto dto) {

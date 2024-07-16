@@ -50,10 +50,10 @@ public class MemberJpaRepository implements MemberRepository{
         return Optional.ofNullable(member);
     }
 
-    @Override
-    public void deleteById(Long id) {
-
-    }
+//    @Override
+//    public void deleteById(Long id) {
+//
+//    }
     // pk 이외의 컬럼으로 조회할 때
     // join 문법으로 raw 쿼리 비슷하게 직접 쿼리 구성
 }
