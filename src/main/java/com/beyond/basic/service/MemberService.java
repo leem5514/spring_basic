@@ -41,13 +41,16 @@ public class MemberService {
         if(dto.getPassword().length() < 8) {
             throw new IllegalArgumentException("비밀번호가 너무 짧습니다.");
         }
+
 //        Member member = new Member();
 //        member.setEmail(dto.getEmail());
 //        member.setPassword(dto.getPassword());
 //        member.setName(dto.getName());
         // DTO에서 코드의 중복성을 막기위헤서 객체적 언어로 변경
         Member member = dto.toEntity();
-
+        if(memberRepository.findByEmail(dto.getEmail()).isPresent()){
+            throw new IllegalArgumentException("이미 존재하는 이메일 입니다");
+        }
         memberRepository.save(member);
 
         // 트랜잭션 롤백처리 테스트 // 보통은 save가 2개이상인 경우에 의미 有 ex) 주문 order, order_Detail

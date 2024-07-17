@@ -1,18 +1,20 @@
 package com.beyond.basic.controller;
 
-import com.beyond.basic.domain.Member;
-import com.beyond.basic.domain.MemberDetailResDto;
-import com.beyond.basic.domain.MemberReqDto;
-import com.beyond.basic.domain.MemberResDto;
+import com.beyond.basic.domain.*;
+import com.beyond.basic.repository.MemberJpaRepository;
 import com.beyond.basic.repository.MemberMemoryRepository;
+import com.beyond.basic.repository.MemberRepository;
 import com.beyond.basic.service.MemberService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Controller // 싱글톤
@@ -35,13 +37,14 @@ public class MemberController {
         // private final MemberService memberService;
 
     // 생성자가 한개밖에 없는 경우 @Autowired 생략 가능
-    private final MemberService memberService;
-    private final MemberMemoryRepository memberMemoryRepository;
+    private MemberService memberService;
+    //private final MemberJpaRepository memberJpaRepository;
 
     @Autowired
-    public MemberController(MemberService memberService, MemberMemoryRepository memberMemoryRepository) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
-        this.memberMemoryRepository = memberMemoryRepository;
+        //this.memberMemoryRepository = memberMemoryRepository;
+
     }
 
     @GetMapping("/")
@@ -57,13 +60,18 @@ public class MemberController {
     }
     // 회원 상세 조회
     // url : member/1, member/2
-    @GetMapping("/member/{id}")
-    // int 또는 long 받을 경우 spring에서 형변환 적용(string -> long, int)
-    public String memberDetail(@PathVariable Long id, Model model) {
-        MemberDetailResDto memberDetailResDto = memberService.memberDetail(id);
-        model.addAttribute("member", memberDetailResDto);
-        return "member/memberDetail";
-    }
+//    @GetMapping("/member/{id}")
+//    // int 또는 long 받을 경우 spring에서 형변환 적용(string -> long, int)
+//    public MemberDetailResDto<Object>(@PathVariable Long id) {
+//       try {
+//            MemberDetailResDto memberDetailResDto = memberService.memberDetail(id);
+//            CommonResDto commonResDto = new CommonResDto(HttpStatus.OK,"is not found",memberDetailResDto);
+//            return new ResponseEntity<>(commonResDto, HttpStatus.OK);
+//       } catch (EntityNotFoundException e){
+//
+//           return new ResponseEntity<>(new CommonErrorDto, HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     // 회원가입 주고
     // url : member/create

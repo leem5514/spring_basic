@@ -19,7 +19,7 @@ import java.util.List;
 //
 
 @Entity
-public class Member {
+public class Member extends BaseEntity{
     @Id // pk 설정(必) - 없는 경우 에러 발생
     // IDENTITY : AUTO_INCREMENT
     // AUTO : JPA 에게 적절한 전략을 선택하도록 맡기는 것.

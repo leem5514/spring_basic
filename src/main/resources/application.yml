@@ -7,6 +7,11 @@
 
 #database 연동 설정
 spring:
+  mvc:
+    pathmatch:
+      # springBoot 2.4 이상에서는 기본적으로 PathPatternParser을 사용하고 있는데,
+      # springfox와 같은 일부 라이브러리에서는 해당 pathpatern rule과 충돌나는 경우가 path 방식변경
+      matching-strategy: ant_path_matcher
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/basic

@@ -33,6 +33,10 @@ public class MemberMemoryRepository implements MemberRepository {
     public Optional<Member> findById(Long id) {
         return null;
     }
+    @Override
+    public Optional<Object> findByEmail(String email) {
+        return null;
+    }
 
 //    @Override
 //    public void deleteById(Long id) {

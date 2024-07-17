@@ -13,6 +13,6 @@ import java.util.Optional;
 // 런타임 시점에 사용자가 인터페이스에 정의한 메서드를 리플렉션 기술을  통해 메서드를 구현
 public interface MemberSpringDataJpaRepository extends MemberRepository, JpaRepository<Member, Long> {
 
-    Optional<Member> findByEmail(String email);
+    Optional<Object> findByEmail(String email);
 
 }

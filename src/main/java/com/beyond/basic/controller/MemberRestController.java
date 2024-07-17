@@ -1,8 +1,9 @@
 package com.beyond.basic.controller;
 
 import com.beyond.basic.domain.*;
-import com.beyond.basic.repository.MemberMemoryRepository;
+//import com.beyond.basic.repository.MemberMemoryRepository;
 import com.beyond.basic.service.MemberService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,15 @@ import java.util.List;
 @RestController
 // restController 의 경우 모든 메서드 상단에 @ResponseBody가 붙는 효과 발생
 @RequestMapping("/rest")
+@Api(tags = "회원관리서비스")
 public class MemberRestController {
 
     private final MemberService memberService;
 
+    @GetMapping("/member/text")
+    public String memberText() {
+        return "ok";
+    }
 
     @Autowired
     public MemberRestController(MemberService memberService) {
@@ -33,25 +39,27 @@ public class MemberRestController {
         return (List<MemberResDto>) new ResponseEntity<>(commonResDto, HttpStatus.CREATED);
     }
     @GetMapping("/member/{id}")
-    public MemberDetailResDto memberDetail(@PathVariable Long id) {
-        List<MemberResDto> memberDetail = memberService.memberList();
-        CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", memberService.memberDetail(id));
-        CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.CREATED, "error code" , memberDetail);
+    public String memberDetail(@PathVariable Long id, Model model) {
+//        List<MemberResDto> memberDetail = memberService.memberList();
+//        CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", memberService.memberDetail(id));
+//        CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.CREATED, "error code" , memberDetail);
 
-        if (memberService.memberDetail(id) != null) {
-            return ResponseEntity<>(commonResDto, HttpStatus.CREATED);
-        }
-        return memberService.memberDetail(id);
-        return new ResponseEntity<>(commonErrorDto, HttpStatus.CREATED);
+        List<MemberResDto> memberList = memberService.memberList();
+        model.addAttribute("memberList", memberList);
+        return "member/memberList";
     }
     @PostMapping("/member/create")
-    public String memberCreatePost(@RequestBody MemberReqDto dto) {
+    public ResponseEntity<Object> memberCreatePost(@RequestBody MemberReqDto dto) {
         try {
+
             memberService.memberCreate(dto);
-            return "ok";
+            CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", null);
+
+            return new ResponseEntity<>(commonResDto, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            return "error!";
+            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(commonErrorDto, HttpStatus.CREATED);
         }
     }
     // 수정은 2가지 요청방식 : PUT, PATCH 요청

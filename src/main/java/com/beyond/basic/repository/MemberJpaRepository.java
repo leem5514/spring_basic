@@ -50,6 +50,11 @@ public class MemberJpaRepository implements MemberRepository{
         return Optional.ofNullable(member);
     }
 
+    @Override
+    public Optional<Object> findByEmail(String email) {
+        return Optional.empty();
+    }
+
 //    @Override
 //    public void deleteById(Long id) {
 //
