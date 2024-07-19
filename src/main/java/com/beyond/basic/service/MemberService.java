@@ -57,7 +57,6 @@ public class MemberService {
 //        if(member.getName().equals("kim")){
 //            throw new IllegalArgumentException("트랜잭션 테스트 에러");
 //        }
-
     }
 
    public MemberDetailResDto memberDetail(Long id) {
@@ -104,7 +103,7 @@ public class MemberService {
         memberRepository.save(member);
 
     }
-//    public void idDelete(Long id) {
+//    public void delete(Long id) {
 //        Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("member is not found"));
 //        memberRepository.delete(member);
 //        // member.updateDelYn("Y");
