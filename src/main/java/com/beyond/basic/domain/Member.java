@@ -1,6 +1,7 @@
 package com.beyond.basic.domain;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,15 +11,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+//@Data
 @NoArgsConstructor // 기본생성자는 JPA 에서 必 이다
 //@AllArgsConstructor
 // entity 어노테이션을 통해서 엔티티 메니져에게 객체 관리를 위임
 // 해당 클래스명으로 테이블 및 컬럼을 자동생성하고 각종 설정정보 위임 (JPA으로 진행할 때 바로 붙이기!!) / JPA : 객체중심사상
 // 싱글톤 객체 = 스프링 빈(bean) - > spring 에서 관리 / @Component : 클래스 단윈로 지정 ,@Bean(외부 라이브러리) : 메서드 단위로 지정, return 객체 + configuration
-//
-
 @Entity
+@Getter
 public class Member extends BaseEntity{
     @Id // pk 설정(必) - 없는 경우 에러 발생
     // IDENTITY : AUTO_INCREMENT
@@ -39,11 +39,11 @@ public class Member extends BaseEntity{
     private List<Post> posts;
 
     // db 에서는 created_time 으로 들어감
-    @CreationTimestamp // DB에선는 current_timeStamp 생성x
-    private LocalDateTime createdTime;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedTime;
+//    @CreationTimestamp // DB에선는 current_timeStamp 생성x
+//    private LocalDateTime createdTime;
+//
+//    @UpdateTimestamp
+//    private LocalDateTime updatedTime;
 
 
     public Member(String name, String email, String password) {

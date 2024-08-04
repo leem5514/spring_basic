@@ -23,79 +23,72 @@ import java.util.List;
 public class MemberRestController {
 
     private final MemberService memberService;
-    private final MyMemberRepository myMemberRepository;
+    private final MyMemberRepository memberRepository;
     @Autowired
-    public MemberRestController(MemberService memberService, MyMemberRepository myMemberRepository) {
+    public MemberRestController(MemberService memberService, MyMemberRepository memberRepository) {
         this.memberService = memberService;
-        this.myMemberRepository = myMemberRepository;
+        this.memberRepository = memberRepository;
     }
-    @GetMapping("/member/text")
-    public String memberText() {
-        return "ok";
-    }
-
-
 
     @GetMapping("/member/list")
-    public List<MemberResDto> memberList() {
+    public ResponseEntity<Object> memberList() {
         List<MemberResDto> memberList = memberService.memberList();
         CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", memberList);
 
-        return (List<MemberResDto>) new ResponseEntity<>(commonResDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(commonResDto, HttpStatus.OK);
     }
-    @GetMapping("/member/{id}")
-    public String memberDetail(@PathVariable Long id, Model model) {
-//        List<MemberResDto> memberDetail = memberService.memberList();
-//        CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", memberService.memberDetail(id));
-//        CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.CREATED, "error code" , memberDetail);
+    @GetMapping("/member/detail/{id}")
+    public ResponseEntity<?> memberDetail(@PathVariable Long id) {
 
-        List<MemberResDto> memberList = memberService.memberList();
-        model.addAttribute("memberList", memberList);
-        return "member/memberList";
+        MemberDetailResDto memberDto = memberService.memberDetail(id);
+        CommonResDto commonResDto = new CommonResDto(HttpStatus.OK, "no error", memberDto);
+        return new ResponseEntity<>(commonResDto, HttpStatus.OK);
+
     }
     @PostMapping("/member/create")
-    public ResponseEntity<Object> memberCreatePost(@RequestBody MemberReqDto dto) {
-        try {
+    public ResponseEntity<?>  memberCreatePost(@RequestBody MemberReqDto dto) {
+//        try {
 
             memberService.memberCreate(dto);
             CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "success created", null);
 
             return new ResponseEntity<>(commonResDto, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(commonErrorDto, HttpStatus.CREATED);
-        }
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+//            return new ResponseEntity<>(commonErrorDto, HttpStatus.CREATED);
+//        }
     }
     // 수정은 2가지 요청방식 : PUT, PATCH 요청
     // PATCH 요청은 부분수정, PUT 요청은 덮어쓰기
 
     @PatchMapping("/member/pw/update")
-    public String memberList(@RequestBody MemberUpdateDto dto ) {
+    public String pwUpdate(@RequestBody MemberUpdateDto dto ) {
         memberService.pwUpdate(dto);
         return "ok";
     }
 
-    public void pwUpdate(MemberUpdateDto dto) {
-
-    }
 
     @DeleteMapping("/member/delete/{id}")
     public String memberDelete(@PathVariable Long id) {
-        //memberService.delete(id);
+        memberService.delete(id);
         return "ok";
     }
 
     // 화면 Return -> MVC 패턴 (JSP 또는 타임리프) -> 데이터를 return 해서 : rest -api 방식
-
+    @GetMapping("/member/text")
+    public String memberText() {
+        return "ok";
+    }
 
     // LAZY(지연로딩), EAGER(즉시로딩) 테스트
-    @ResponseBody
     @GetMapping("member/post/all")
-    public void memberPostAll(){
-        List<Member> memberList = myMemberRepository.findAll();
-        for (Member m : memberList) {
-            System.out.println(m.getPosts().size());
+    public void memberPostAll() {
+        System.out.println("memberRepository: " + memberRepository.findAll());
+
+        List<Member> memberList = memberRepository.findAll();
+        for (Member member: memberList) {
+            System.out.println("member size: " + member.getPosts().size());
         }
     }
     // LAZY 가 N+1에 관한 완전한 이슈를 해결해 주지 않음 하지만 참조 하지 않은 경우에 대한 해결은 가능

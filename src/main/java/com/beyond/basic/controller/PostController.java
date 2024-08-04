@@ -31,8 +31,7 @@ public class PostController {
     // LAZY(지연로딩), EAGER(즉시로딩) 테스트
     @GetMapping("post/member/all")
     @ResponseBody
-    public void postMemberAll(){
-        System.out.println(postService.postList());
+    public void memberPostAll() {
+        System.out.println("postRepository: " + postRepository.findAll());
     }
-
 }

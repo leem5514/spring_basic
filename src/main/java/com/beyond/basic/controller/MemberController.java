@@ -53,25 +53,22 @@ public class MemberController {
     }
     //회원 목록 조회
     @GetMapping("/member/list")
-    public String memberList(MemberResDto resDto, Model model) {
+    public String memberList(Model model) {
         List<MemberResDto> memberList = memberService.memberList();
         model.addAttribute("memberList", memberList);
         return "member/memberList";
     }
     // 회원 상세 조회
     // url : member/1, member/2
-//    @GetMapping("/member/{id}")
-//    // int 또는 long 받을 경우 spring에서 형변환 적용(string -> long, int)
-//    public MemberDetailResDto<Object>(@PathVariable Long id) {
-//       try {
-//            MemberDetailResDto memberDetailResDto = memberService.memberDetail(id);
-//            CommonResDto commonResDto = new CommonResDto(HttpStatus.OK,"is not found",memberDetailResDto);
-//            return new ResponseEntity<>(commonResDto, HttpStatus.OK);
-//       } catch (EntityNotFoundException e){
-//
-//           return new ResponseEntity<>(new CommonErrorDto, HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @GetMapping("/member/{id}")
+    // int 또는 long 받을 경우 spring에서 형변환 적용(string -> long, int)
+    public String memberDetail(@PathVariable Long id, Model model) {
+
+        MemberDetailResDto memberDto = memberService.memberDetail(id);
+
+        model.addAttribute("memberDto", memberDto);
+        return "member/memberDetail";
+    }
 
     // 회원가입 주고
     // url : member/create

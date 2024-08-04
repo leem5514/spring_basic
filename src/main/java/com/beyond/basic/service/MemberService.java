@@ -25,15 +25,14 @@ public class MemberService {
 //    }
 
     // 다형성 구현
-    private final MemberRepository memberRepository;
+    private final MyMemberRepository memberRepository;
 
     @Autowired // 싱글톤 객체를 주입(DI) 받는다라는 것을 의미
 //    public MemberService(MemberMemoryRepository memberMemoryRepository) {
 //        this.memberRepository = memberMemoryRepository;
 //    }
-    public MemberService(MemberJpaRepository memberMemoryRepository) {
+    public MemberService(MyMemberRepository memberMemoryRepository) {
         this.memberRepository = memberMemoryRepository;
-
     }
 
     @Transactional
@@ -41,7 +40,6 @@ public class MemberService {
         if(dto.getPassword().length() < 8) {
             throw new IllegalArgumentException("비밀번호가 너무 짧습니다.");
         }
-
 //        Member member = new Member();
 //        member.setEmail(dto.getEmail());
 //        member.setPassword(dto.getPassword());
@@ -73,40 +71,50 @@ public class MemberService {
 //        LocalDateTime createdTime = member.getCreatedTime();
 //        String value = createdTime.getYear()+"년" + createdTime.getMonthValue()+"월"+createdTime.getDayOfMonth()+"일";
 //        dto.setCreatedTime(value);
-        System.out.println("글쓴이의 쓴 글의 개수 " + member.getPosts().size());
-        for(Post p : member.getPosts()){
-            System.out.println("글의제목" + p.getTitle());
-        }
-        return member.detFromEntity();
+//        System.out.println("글쓴이의 쓴 글의 개수 " + member.getPosts().size());
+//        for(Post p : member.getPosts()){
+//            System.out.println("글의제목" + p.getTitle());
+//        }
+       MemberDetailResDto memberDetailResDto = member.detFromEntity();
+       return memberDetailResDto;
    }
 
     public List<MemberResDto> memberList() {
-        List<MemberResDto> memberResDtos = new ArrayList<>();
         List<Member> memberList = memberRepository.findAll();
-        for(Member member : memberList) {
-            memberResDtos.add(member.listFromEntity());
-//            MemberResDto resDto = new MemberResDto();
-//            resDto.setId(member.getId());
-//            resDto.setName(member.getName());
-//            resDto.setEmail(member.getEmail());
+        List<MemberResDto> memberResDtoList = new ArrayList<>();
+        int j = 0;
+        for (Member member : memberList) {
+//            memberResDtoList.add(new MemberResDto());
+//            memberResDtoList.get(j).setId(member.getId());
+//            memberResDtoList.get(j).setName(member.getName());
+//            memberResDtoList.get(j).setEmail(member.getEmail());
 
+            MemberResDto memberResDto = member.listFromEntity();
+            memberResDtoList.add(memberResDto);
+            j++;
+
+            System.out.println(memberResDto);
         }
-        //return memberResDto;
-        return memberResDtos;
+        return memberResDtoList;
     }
 
     public void pwUpdate(MemberUpdateDto dto ) {
         Member member = memberRepository.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException("member is not found"));
         member.updatePw(dto.getPassword());
-
+        System.out.println(member.getPassword());
+        System.out.println(member.getId());
         // 기존 객체를 조회 후 수정한 다음 save 시에는 jpa update
         memberRepository.save(member);
 
     }
-//    public void delete(Long id) {
-//        Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("member is not found"));
-//        memberRepository.delete(member);
-//        // member.updateDelYn("Y");
-//        /// memberRepository.save(member);
-//    }
+    @Transactional
+    public void delete(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(()->
+                new EntityNotFoundException("member is not found"));
+        memberRepository.delete(member);
+
+        // member.updateDelYn("Y");
+        // memberRepository.delete(member);
+    }
+
 }
